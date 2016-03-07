@@ -1,0 +1,27 @@
+/includes/databaseConnection.php
+/admin/includes/databaseConnection.php
+
+/fonts/
+
+/store/
+
+/images/
+
+.well-known
+
+# Logs and databases #
+######################
+*.log
+*.sql
+
+# Images #
+##########
+*.jpg
+*.gif
+*.png
+*.svg
+*.ico
+
+# Sublime #
+###########
+*.sublime-workspace

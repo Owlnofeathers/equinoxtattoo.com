@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.upload input{
+	color:#fff;
+	padding:1em 0;
+}
+
+.upload input:hover{
+	cursor:pointer;
+}
