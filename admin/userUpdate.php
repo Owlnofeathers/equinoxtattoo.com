@@ -30,7 +30,7 @@ include 'includes/navigation.html';
    
     if ($ok) {
         // add database code here
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = sprintf("UPDATE tblUsers SET Name='%s', isAdmin='%s'
           WHERE id=%s",
           mysqli_real_escape_string($db, $name),
@@ -42,7 +42,7 @@ include 'includes/navigation.html';
       }
 
   } else {
-      include 'includes/databaseConnection.php';
+      include '../includes/databaseConnection.php';
       $sql = sprintf('SELECT * FROM tblUsers WHERE id=%s', $id);
       $result = mysqli_query($db, $sql);
       foreach ($result as $row) {
@@ -66,7 +66,7 @@ include 'includes/navigation.html';
           $password = $_POST['password'];
           $password = password_hash($password, PASSWORD_DEFAULT);
 
-          include 'includes/databaseConnection.php';      
+          include '../includes/databaseConnection.php';      
           $sql = sprintf("SELECT Password FROM tblUsers WHERE id=%s", $id);
           $result = mysqli_query($db, $sql);
           $row = mysqli_fetch_assoc($result); 

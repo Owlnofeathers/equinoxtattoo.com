@@ -6,7 +6,7 @@ $message = '';
 
 if (isset($_POST['name']) && isset($_POST['password'])) {
     
-    include 'includes/databaseConnection.php';
+    include '../includes/databaseConnection.php';
     $sql = sprintf("SELECT * FROM tblUsers WHERE Name='%s'",
         mysqli_real_escape_string($db, $_POST['name'])
     );

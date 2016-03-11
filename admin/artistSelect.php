@@ -13,7 +13,7 @@
         <i class="fa fa-info-circle"></i></a></h2>
         
         <?php
-          include 'includes/databaseConnection.php';
+          include '../includes/databaseConnection.php';
           $sql = 'SELECT * FROM tblArtists';
           $result = mysqli_query($db, $sql);
 

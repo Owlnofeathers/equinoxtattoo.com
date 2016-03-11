@@ -36,7 +36,7 @@
     }
 
     if ($ok) {
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $checkUsername = mysqli_query($db, 'SELECT Name FROM tblUsers WHERE Name = "'.$name.'"');
         if (mysqli_num_rows($checkUsername) > 0) {
            mysqli_close($db);

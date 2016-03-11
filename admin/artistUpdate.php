@@ -60,7 +60,7 @@ include 'includes/upload.php';
 
     if ($ok) {
         // add database code here
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = sprintf("UPDATE tblArtists SET ArtistSwitch='%s', Name='%s', Price='%s', Description='%s', Facebook='%s', Instagram='%s', Email='%s'
           WHERE id=%s",
           mysqli_real_escape_string($db, $enabled),
@@ -76,7 +76,7 @@ include 'includes/upload.php';
         mysqli_close($db);
       }
   } else {
-      include 'includes/databaseConnection.php';
+      include '../includes/databaseConnection.php';
       $sql = sprintf('SELECT * FROM tblArtists WHERE id=%s', $id);
       $result = mysqli_query($db, $sql);
       foreach ($result as $row) {

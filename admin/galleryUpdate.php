@@ -41,7 +41,7 @@ include 'includes/upload.php';
 
     if ($ok) {
         // add database code here
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = sprintf("UPDATE tblGallery SET GallerySwitch='%s', GalleryName='%s', GalleryLink='%s', GalleryText='%s'
           WHERE id=%s",
           mysqli_real_escape_string($db, $enabled),
@@ -54,7 +54,7 @@ include 'includes/upload.php';
         mysqli_close($db);
       }
   } else {
-      include 'includes/databaseConnection.php';
+      include '../includes/databaseConnection.php';
       $sql = sprintf('SELECT * FROM tblGallery WHERE id=%s', $id);
       $result = mysqli_query($db, $sql);
       foreach ($result as $row) {

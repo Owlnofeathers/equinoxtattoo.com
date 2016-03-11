@@ -9,7 +9,7 @@
         header('Location: eventSelect.php');
     }
 
-    include 'includes/databaseConnection.php';
+    include '../includes/databaseConnection.php';
     $sql = "DELETE FROM tblEvents WHERE id=$id";
     mysqli_query($db, $sql);
     $message = '<div class="alert alert-success" role="alert">Event deleted.</div>';

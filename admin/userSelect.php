@@ -14,7 +14,7 @@
           If you want to add a new user, select 'Users', then 'New User' in the navigation bar.">
           <i class="fa fa-info-circle"></i></a></h2>
         <?php
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = 'SELECT * FROM tblUsers';
         $result = mysqli_query($db, $sql);
 

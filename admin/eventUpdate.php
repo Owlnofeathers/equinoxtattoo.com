@@ -52,7 +52,7 @@ include 'includes/navigation.html';
 
     if ($ok) {
         // add database code here
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = sprintf("UPDATE tblEvents SET EventSwitch='%s', Heading='%s', EventText='%s', ButtonSwitch='%s', ButtonText='%s', ButtonLink='%s'
           WHERE id=%s",
           mysqli_real_escape_string($db, $enabled),
@@ -67,7 +67,7 @@ include 'includes/navigation.html';
         mysqli_close($db);
       }
   } else {
-      include 'includes/databaseConnection.php';
+      include '../includes/databaseConnection.php';
       $sql = sprintf('SELECT * FROM tblEvents WHERE id=%s', $id);
       $result = mysqli_query($db, $sql);
       foreach ($result as $row) {

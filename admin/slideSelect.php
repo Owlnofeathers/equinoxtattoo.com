@@ -12,7 +12,7 @@
         data-content="This is the automatic slide show on the front page of the site. Edit each one from this page.">
         <i class="fa fa-info-circle"></i></a></h2>
         <?php
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = 'SELECT * FROM tblSliders';
         $result = mysqli_query($db, $sql);
 

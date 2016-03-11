@@ -12,7 +12,7 @@
         data-content="Review and edit the gallery information from here.">
         <i class="fa fa-info-circle"></i></a></h2>
         <?php
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = 'SELECT * FROM tblGallery';
         $result = mysqli_query($db, $sql);
 

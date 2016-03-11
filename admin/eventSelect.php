@@ -15,7 +15,7 @@
         If you would like to add a new event, select 'Events', then 'New Event' from the navigation bar.">
         <i class="fa fa-info-circle"></i></a></h2>
         <?php
-          include 'includes/databaseConnection.php';
+          include '../includes/databaseConnection.php';
           $sql = 'SELECT * FROM tblEvents';
           $result = mysqli_query($db, $sql);
 

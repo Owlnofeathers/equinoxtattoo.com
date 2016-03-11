@@ -45,7 +45,7 @@ include 'includes/navigation.html';
 
      if ($ok) {
     
-        include 'includes/databaseConnection.php';
+        include '../includes/databaseConnection.php';
         $sql = sprintf("INSERT INTO tblEvents (EventSwitch, Heading, EventText, ButtonSwitch, ButtonText, ButtonLink) VALUES (
           '%s', '%s', '%s', '%s', '%s', '%s'
         )", mysqli_real_escape_string($db, $enabled),

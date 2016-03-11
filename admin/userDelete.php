@@ -9,7 +9,7 @@
         header('Location: userSelect.php');
     }
 
-    include 'includes/databaseConnection.php';
+    include '../includes/databaseConnection.php';
     $sql = "DELETE FROM tblUsers WHERE id=$id";
     mysqli_query($db, $sql);
     $message = '<div class="alert alert-success" role="alert">User deleted.</div>';
