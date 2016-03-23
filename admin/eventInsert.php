@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'auth.php';
-include 'includes/navigation.html';
+include 'includes/header.php';
 
   $enabled = '';
   $heading = '';

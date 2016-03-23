@@ -1,6 +1,6 @@
 <?php
     require 'auth.php';
-    include 'includes/navigation.html';
+    include 'includes/header.php';
 
     $message = '';
     if (isset($_GET['id']) && ctype_digit($_GET['id'])) {

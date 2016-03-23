@@ -1,9 +1,10 @@
 <?php
-session_start();
-require 'auth.php';
-include 'includes/navigation.html';
-include 'includes/upload.php';
+  session_start();
+  require 'auth.php';
+  include 'includes/header.php';
+  include 'includes/upload.php';
 
+  $db = new Database();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
@@ -25,73 +26,56 @@ include 'includes/upload.php';
     if (!isset($_POST['artistSwitch']) || $_POST['artistSwitch'] === '') {
         $ok = false;
     } else {
-        $enabled = $_POST['artistSwitch'];
+        $enabled = mysqli_real_escape_string($db->link, $_POST['artistSwitch']);
     }
     if (!isset($_POST['name']) || $_POST['name'] === '') {
         $ok = false;
     } else {
-        $name = $_POST['name'];
+        $name = mysqli_real_escape_string($db->link, $_POST['name']);
     }
     if (!isset($_POST['price']) || $_POST['price'] === '') {
         $ok = false;
     } else {
-        $price = $_POST['price'];
+        $price = mysqli_real_escape_string($db->link, $_POST['price']);
     }
     if (!isset($_POST['description']) || $_POST['description'] === '') {
         $ok = false;
     } else {
-        $description = $_POST['description'];
+        $description = mysqli_real_escape_string($db->link, $_POST['description']);
     }
     if (!isset($_POST['facebook']) || $_POST['facebook'] === '') {
         $ok = false;
     } else {
-        $facebook = $_POST['facebook'];
+        $facebook = mysqli_real_escape_string($db->link, $_POST['facebook']);
     }
     if (!isset($_POST['instagram']) || $_POST['instagram'] === '') {
         $ok = false;
     } else {
-        $instagram = $_POST['instagram'];
+        $instagram = mysqli_real_escape_string($db->link, $_POST['instagram']);
     }
     if (!isset($_POST['email']) || $_POST['email'] === '') {
         $ok = false;
     } else {
-        $email = $_POST['email'];
+        $email = mysqli_real_escape_string($db->link, $_POST['email']);
     }
 
     if ($ok) {
-        // add database code here
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("UPDATE tblArtists SET ArtistSwitch='%s', Name='%s', Price='%s', Description='%s', Facebook='%s', Instagram='%s', Email='%s'
-          WHERE id=%s",
-          mysqli_real_escape_string($db, $enabled),
-          mysqli_real_escape_string($db, $name),
-          mysqli_real_escape_string($db, $price),
-          mysqli_real_escape_string($db, $description),
-          mysqli_real_escape_string($db, $facebook),
-          mysqli_real_escape_string($db, $instagram),
-          mysqli_real_escape_string($db, $email),
-          $id);
-        mysqli_query($db, $sql);
-        $message = '<div class="alert alert-success" role="alert">Artist updated.</div>';
-        mysqli_close($db);
+        $update_row = $db->update("UPDATE tblArtists SET ArtistSwitch = '$enabled', Name = '$name', Price = '$price', Description = '$description', Facebook = '$facebook', Instagram = '$instagram', Email = '$email'
+          WHERE id = '$id'");
       }
-  } else {
-      include '../includes/databaseConnection.php';
-      $sql = sprintf('SELECT * FROM tblArtists WHERE id=%s', $id);
-      $result = mysqli_query($db, $sql);
-      foreach ($result as $row) {
-          $enabled = $row['ArtistSwitch'];
-          $name = $row['Name'];
-          $price = $row['Price'];
-          $description = $row['Description']; 
-          $facebook = $row['Facebook'];
-          $instagram = $row['Instagram'];
-          $email = $row['Email'];      
-        }
-      mysqli_close($db);
-  }
+    } else {
+      $artist = $db->select("SELECT * FROM tblArtists WHERE id=" .$id)->fetch_assoc();
 
+      $enabled = $artist['ArtistSwitch'];
+      $name = $artist['Name'];
+      $price = $artist['Price'];
+      $description = $artist['Description']; 
+      $facebook = $artist['Facebook'];
+      $instagram = $artist['Instagram'];
+      $email = $artist['Email'];      
+    }
 ?>
+
 <body>
   <div class="container">
     <div class="row">

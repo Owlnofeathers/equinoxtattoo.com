@@ -1,6 +1,6 @@
 <?php
   require 'auth.php';
-  include 'includes/navigation.html';
+  include 'includes/header.php';
 ?>
 
   <div class="container">

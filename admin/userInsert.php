@@ -1,7 +1,7 @@
 <?php
   require 'auth.php';
   require 'includes/password.php'; 
-  include 'includes/navigation.html';
+  include 'includes/header.php';
 ?>
 
 <body>

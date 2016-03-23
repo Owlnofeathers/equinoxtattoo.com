@@ -1,8 +1,8 @@
 <?php
-session_start();
-require 'auth.php';
-require 'includes/password.php'; 
-include 'includes/navigation.html';
+  session_start();
+  require 'auth.php';
+  require 'includes/password.php'; 
+  include 'includes/header.php';
 
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
