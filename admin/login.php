@@ -1,17 +1,17 @@
 <?php
   session_start();
   require 'includes/password.php';
+  include '../config/config.php';
+  include '../libraries/Database.php';
 
-$message = '';
+  $db = new Database();
+
+  $message = '';
 
 if (isset($_POST['name']) && isset($_POST['password'])) {
-    
-    include '../includes/databaseConnection.php';
-    $sql = sprintf("SELECT * FROM tblUsers WHERE Name='%s'",
-        mysqli_real_escape_string($db, $_POST['name'])
-    );
-    $result = mysqli_query($db, $sql);
-    $row = mysqli_fetch_assoc($result);
+    $name = mysqli_real_escape_string($db->link, $_POST['name']);
+    $usr = $db->select("SELECT * FROM tblUsers WHERE Name='$name'");
+    $row = $usr->fetch_assoc();
     if ($row) {
         $hash = $row['Password'];
         $isAdmin = $row['isAdmin'];
@@ -28,7 +28,6 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
     } else {
         $message = '<div class="alert alert-danger" role="alert">Login failed.</div>';
     }
-    mysqli_close($db);
 }
 
 ?>
