@@ -2,9 +2,10 @@
   require 'auth.php';
   require 'includes/password.php'; 
   include 'includes/header.php';
+
+  $db = new Database();
 ?>
 
-<body>
 <?php
   $message = '';
   $name = '';
@@ -17,29 +18,27 @@
     if (!isset($_POST['name']) || $_POST['name'] === '') {
         $ok = false;
     } else {
-        $name = $_POST['name'];
+        $name = mysqli_real_escape_string($db->link, $_POST['name']);
     }
     if (!isset($_POST['password']) || $_POST['password'] === '') {
         $ok = false;
     } else {
-        $password = $_POST['password'];
+        $password = mysqli_real_escape_string($db->link, $_POST['password']);
     }
     if (!isset($_POST['confirmPassword']) || $_POST['confirmPassword'] === '') {
         $ok = false;
     } else {
-        $confirmPassword = $_POST['confirmPassword'];
+        $confirmPassword = mysqli_real_escape_string($db->link, $_POST['confirmPassword']);
     }
     if (!isset($_POST['isAdmin']) || $_POST['isAdmin'] === '') {
         $ok = false;
     } else {
-        $setAdmin = $_POST['isAdmin'];
+        $setAdmin = mysqli_real_escape_string($db->link, $_POST['isAdmin']);
     }
 
     if ($ok) {
-        include '../includes/databaseConnection.php';
-        $checkUsername = mysqli_query($db, 'SELECT Name FROM tblUsers WHERE Name = "'.$name.'"');
+        $checkUsername = $db->select("SELECT Name FROM tblUsers WHERE Name = '$name'");
         if (mysqli_num_rows($checkUsername) > 0) {
-           mysqli_close($db);
            $message = '<div class="alert alert-danger" role="alert">User name already exists.</div>';
 
         } else { 
@@ -48,14 +47,8 @@
         	} else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             // add database code here
-            $sql = sprintf("INSERT INTO tblUsers (Name, Password, isAdmin) VALUES (
-              '%s', '%s', '%s'
-            )", mysqli_real_escape_string($db, $name),
-                mysqli_real_escape_string($db, $hash),
-                mysqli_real_escape_string($db, $setAdmin));
-
-            mysqli_query($db, $sql);
-            mysqli_close($db);   
+            $insert_row = $db->insert("INSERT INTO tblUsers (Name, Password, isAdmin) VALUES (
+              '$name', '$hash', '$setAdmin')"); 
             $message = '<div class="alert alert-success" role="alert">User added.</div>';   
             }     
             
@@ -63,7 +56,7 @@
     }
 }
 ?>
-
+<body>
 <div class="container">
 	<div class="row">
 	  <div class="col-md-6">

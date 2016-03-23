@@ -4,6 +4,7 @@
   require 'includes/password.php'; 
   include 'includes/header.php';
 
+  $db = new Database();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
@@ -20,36 +21,26 @@
     if (!isset($_POST['name']) || $_POST['name'] === '') {
         $ok = false;
     } else {
-        $name = $_POST['name'];
+        $name = mysqli_real_escape_string($db->link, $_POST['name']);
     }
     if (!isset($_POST['isAdmin']) || $_POST['isAdmin'] === '') {
         $ok = false;
     } else {
-        $setAdmin = $_POST['isAdmin'];
+        $setAdmin = mysqli_real_escape_string($db->link, $_POST['isAdmin']);
     }
    
     if ($ok) {
-        // add database code here
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("UPDATE tblUsers SET Name='%s', isAdmin='%s'
-          WHERE id=%s",
-          mysqli_real_escape_string($db, $name),
-          mysqli_real_escape_string($db, $setAdmin),
-          $id);
-        mysqli_query($db, $sql);
-        $message = '<div class="alert alert-success" role="alert">User updated.</div>';
-        mysqli_close($db);
+
+        $update_row = $db->update("UPDATE tblUsers SET Name='$name', isAdmin='$setAdmin'
+          WHERE id =" .$id);
       }
 
   } else {
-      include '../includes/databaseConnection.php';
-      $sql = sprintf('SELECT * FROM tblUsers WHERE id=%s', $id);
-      $result = mysqli_query($db, $sql);
-      foreach ($result as $row) {
-          $name = $row['Name'];
-          $setAdmin = $row['isAdmin'];
+      $usrs = $db->select("SELECT * FROM tblUsers WHERE id =" .$id);
+      foreach ($usrs as $usr) {
+          $name = $usr['Name'];
+          $setAdmin = $usr['isAdmin'];
       }
-      mysqli_close($db);
   }
 
 // password change section
@@ -65,22 +56,14 @@
           $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
           $password = $_POST['password'];
           $password = password_hash($password, PASSWORD_DEFAULT);
-
-          include '../includes/databaseConnection.php';      
-          $sql = sprintf("SELECT Password FROM tblUsers WHERE id=%s", $id);
-          $result = mysqli_query($db, $sql);
-          $row = mysqli_fetch_assoc($result); 
-          if ($row) {
-            $hash = $row['Password'];
-
+    
+          $passes = $db->select("SELECT Password FROM tblUsers WHERE id =" .$id);
+          $pass = $passes->fetch_assoc(); 
+          if ($pass) {
+            $hash = $pass['Password'];
             if (password_verify($_POST['password'], $hash)) {
-              $sql = sprintf("UPDATE tblUsers SET Password='%s'
-                              WHERE id=%s",
-              mysqli_real_escape_string($db, $newPassword),
-              $id);
-              mysqli_query($db, $sql);
-              $message = '<div class="alert alert-success" role="alert">Password updated.</div>';
-              mysqli_close($db);
+              $update_row = $db->update("UPDATE tblUsers SET Password='$newPassword'
+                              WHERE id =" .$id);
           } else 
               $message = '<div class="alert alert-danger" role="alert">Incorrect password.</div>';
 

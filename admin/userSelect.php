@@ -1,6 +1,10 @@
 <?php
   require 'auth.php';
   include 'includes/header.php';
+
+  $db = new Database();
+
+  $usrs = $db->select("SELECT * FROM tblUsers");
 ?>
 
   <div class="container">
@@ -13,33 +17,20 @@
           If you want to keep the user and password, but don't want them to be able to log in, Change 'Admin' to '0'. 
           If you want to add a new user, select 'Users', then 'New User' in the navigation bar.">
           <i class="fa fa-info-circle"></i></a></h2>
-        <?php
-        include '../includes/databaseConnection.php';
-        $sql = 'SELECT * FROM tblUsers';
-        $result = mysqli_query($db, $sql);
 
-        echo '
-        <table class="table table-hover">
-        <tbody>';
-        foreach ($result as $row) {
-            printf('
-              <tr>
-                <td><i class="fa fa-user"></i> %s</td>
-                <td>Admin = %s</td>
-                <td><a class="btn btn-default" href="userUpdate.php?id=%s" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
-                <td><a class="btn btn-danger delete" href="userDelete.php?id=%s" role="button"><i class="fa fa-trash-o"></i> Delete</a></td>
-              </tr>',
-              htmlspecialchars($row['Name']),
-              htmlspecialchars($row['isAdmin']),
-              htmlspecialchars($row['id']),
-              htmlspecialchars($row['id'])
-            );
-        }
-        echo '</tbody></table>';
+          <table class="table table-hover">
+          <tbody>
+          
+          <?php foreach ($usrs as $usr) : ?>
+            <tr>
+              <td><i class="fa fa-user"></i> <?php echo htmlspecialchars($usr['Name']); ?></td>
+              <td>Admin = <?php echo htmlspecialchars($usr['isAdmin']); ?></td>
+              <td><a class="btn btn-default" href="userUpdate.php?id=<?php echo $usr['id']; ?>" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
+              <td><a class="btn btn-danger delete" href="userDelete.php?id=<?php echo $usr['id']; ?>" role="button"><i class="fa fa-trash-o"></i> Delete</a></td>
+            </tr>
+          <?php endforeach; ?>
 
-        mysqli_close($db);
-
-        ?>
+        </tbody></table>
       </div>
     </div>
   </div>
