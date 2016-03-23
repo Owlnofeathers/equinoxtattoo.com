@@ -3,6 +3,7 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $slides = $db->select("SELECT * FROM tblSliders");
 ?>
 
   <div class="container">
@@ -13,12 +14,7 @@
         <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Slider Administration" 
         data-content="This is the automatic slide show on the front page of the site. Edit each one from this page.">
         <i class="fa fa-info-circle"></i></a></h2>
-        <?php
-        include '../includes/databaseConnection.php';
-        $sql = 'SELECT * FROM tblSliders';
-        $result = mysqli_query($db, $sql);
 
-        echo '
         <table class="table table-responsive table-bordered table-hover">
         <tbody>
         <th bgcolor="#000">
@@ -27,29 +23,18 @@
           <td bgcolor="#000"><strong>Text</strong></td>
           <td bgcolor="#000"></td>
         </th>
-        ';
-        foreach ($result as $row) {
-            printf('
-              
-              <tr>
-                <td>Slide %s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td><a class="btn btn-default" href="slideUpdate.php?id=%s" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
-              </tr>',
-              htmlspecialchars($row['id']),
-              htmlspecialchars($row['SlideSwitch']),
-              htmlspecialchars($row['Heading']),
-              htmlspecialchars($row['SlideText']),
-              htmlspecialchars($row['id'])
-            );
-        }
-        echo '</tbody></table>';
 
-        mysqli_close($db);
-
-        ?>
+        <?php foreach ($slides as $slide) : ?> 
+          <tr>
+            <td>Slide <?php echo htmlspecialchars($slide['id']); ?></td>
+            <td><?php echo htmlspecialchars($slide['SlideSwitch']); ?></td>
+            <td><?php echo htmlspecialchars($slide['Heading']); ?></td>
+            <td><?php echo htmlspecialchars($slide['SlideText']); ?></td>
+            <td><a class="btn btn-default" href="slideUpdate.php?id=<?php echo $slide['id']; ?>" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
+          </tr>
+         <?php endforeach; ?>
+ 
+		</tbody></table>
       </div>
     </div>
   </div>
