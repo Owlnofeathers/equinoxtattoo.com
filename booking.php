@@ -1,6 +1,10 @@
 <?php 
   include'includes/form.php';
   include'includes/header.php';
+
+  $db = new Database();
+
+  $artists = $db->select("SELECT * FROM tblArtists WHERE ArtistSwitch = 1");
 ?>
 
   <section class="section-title">
@@ -57,17 +61,9 @@
                 <div class="col-lg-10">
                   <select class="form-control" id="select" name="artist">
                     <option>Any Artist</option>
-                    <?php
-                      include 'includes/databaseConnection.php';
-                      
-                      $sql = 'SELECT * FROM tblArtists WHERE ArtistSwitch = 1';
-                      $res = mysqli_query($db, $sql);
-
-                      foreach ($res as $row) {
-                        printf('
-                          <option>%s</option>',htmlspecialchars($row['Name']));
-                      }
-                    ?>
+                    <?php foreach ($artists as $artist) : ?>
+                      <option><?php echo htmlspecialchars($artist['Name']); ?></option> 
+                    <?php endforeach; ?>
                   </select>
                 </div>
               </div>
