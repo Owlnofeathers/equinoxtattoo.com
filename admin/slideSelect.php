@@ -1,6 +1,8 @@
 <?php
   require 'auth.php';
   include 'includes/header.php';
+
+  $db = new Database();
 ?>
 
   <div class="container">

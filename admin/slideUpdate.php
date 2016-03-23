@@ -1,9 +1,10 @@
 <?php
-session_start();
-require 'auth.php';
-include 'includes/header.php';
-include 'includes/upload.php';
+  session_start();
+  require 'auth.php';
+  include 'includes/header.php';
+  include 'includes/upload.php';
 
+  $db = new Database();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
@@ -20,66 +21,28 @@ include 'includes/upload.php';
 
   if (isset($_POST['save'])) {
     $ok = true;
-    if (!isset($_POST['enabled']) || $_POST['enabled'] === '') {
-        $ok = false;
-    } else {
-        $enabled = $_POST['enabled'];
-    }
-    if (!isset($_POST['heading']) || $_POST['heading'] === '') {
-        $ok = false;
-    } else {
-        $heading = $_POST['heading'];
-    }
-    if (!isset($_POST['slideText']) || $_POST['slideText'] === '') {
-        $ok = false;
-    } else {
-        $text = $_POST['slideText'];
-    }
-    if (!isset($_POST['buttonSwitch']) || $_POST['buttonSwitch'] === '') {
-        $ok = false;
-    } else {
-        $buttonSwitch = $_POST['buttonSwitch'];
-    }
-    if (!isset($_POST['buttonText']) || $_POST['buttonText'] === '') {
-        $ok = false;
-    } else {
-        $buttonText = $_POST['buttonText'];
-    }
-    if (!isset($_POST['buttonLink']) || $_POST['buttonLink'] === '') {
-        $ok = false;
-    } else {
-        $buttonLink = $_POST['buttonLink'];
-    }
+    $enabled = mysqli_real_escape_string($db->link, $_POST['enabled']);
+    $buttonSwitch = mysqli_real_escape_string($db->link, $_POST['buttonSwitch']);
+    $heading = mysqli_real_escape_string($db->link, $_POST['heading']);
+    $text = mysqli_real_escape_string($db->link, $_POST['slideText']);
+    $buttonText = mysqli_real_escape_string($db->link, $_POST['buttonText']);
+    $buttonLink = mysqli_real_escape_string($db->link, $_POST['buttonLink']);
+  }
 
     if ($ok) {
-        // add database code here
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("UPDATE tblSliders SET SlideSwitch='%s', Heading='%s', SlideText='%s', ButtonSwitch='%s', ButtonText='%s', ButtonLink='%s'
-          WHERE id=%s",
-          mysqli_real_escape_string($db, $enabled),
-          mysqli_real_escape_string($db, $heading),
-          mysqli_real_escape_string($db, $text),
-          mysqli_real_escape_string($db, $buttonSwitch),
-          mysqli_real_escape_string($db, $buttonText),
-          mysqli_real_escape_string($db, $buttonLink),
-          $id);
-        mysqli_query($db, $sql);
-        $message = '<div class="alert alert-success" role="alert">Slide updated.</div>';
-        mysqli_close($db);
-      }
-  } else {
-      include '../includes/databaseConnection.php';
-      $sql = sprintf('SELECT * FROM tblSliders WHERE id=%s', $id);
-      $result = mysqli_query($db, $sql);
-      foreach ($result as $row) {
-          $enabled = $row['SlideSwitch'];
-          $heading = $row['Heading'];
-          $text = $row['SlideText'];
-          $buttonSwitch = $row['ButtonSwitch'];
-          $buttonText = $row['ButtonText'];
-          $buttonLink = $row['ButtonLink'];        
+      $update_row = $db->update("UPDATE tblSliders SET SlideSwitch='$enabled', Heading='$heading', SlideText='$text', ButtonSwitch='$buttonSwitch', ButtonText='$buttonText', ButtonLink='$buttonLink'
+          WHERE id=" .$id);
+    } else {
+      $sliders = $db->select("SELECT * FROM tblSliders WHERE id = " .$id);
+ 
+      foreach ($sliders as $slider) {
+          $enabled = $slider['SlideSwitch'];
+          $heading = $slider['Heading'];
+          $text = $slider['SlideText'];
+          $buttonSwitch = $slider['ButtonSwitch'];
+          $buttonText = $slider['ButtonText'];
+          $buttonLink = $slider['ButtonLink'];        
         }
-      mysqli_close($db);
   }
 
 ?>
