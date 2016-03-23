@@ -1,6 +1,10 @@
 <?php
   require 'auth.php';
   include 'includes/header.php';
+
+  $db = new Database();
+
+  $events = $db->select("SELECT * FROM tblEvents");
 ?>
 
   <div class="container">
@@ -14,13 +18,8 @@
         Choose the amount of 'Enabled' events which is appropriate to display on the home page. 
         If you would like to add a new event, select 'Events', then 'New Event' from the navigation bar.">
         <i class="fa fa-info-circle"></i></a></h2>
-        <?php
-          include '../includes/databaseConnection.php';
-          $sql = 'SELECT * FROM tblEvents';
-          $result = mysqli_query($db, $sql);
-
-          echo '
-          <table class="table table-responsive table-bordered table-hover">
+        
+        <table class="table table-responsive table-bordered table-hover">
           <tbody>
           <th bgcolor="#000">
             <td bgcolor="#000"><strong>Enabled</strong></td>
@@ -29,31 +28,17 @@
             <td bgcolor="#000"></td>
             <td bgcolor="#000"></td>
           </th>
-          ';
-          foreach ($result as $row) {
-              printf('
-                
-                <tr>
-                  <td>Event %s</td>
-                  <td>%s</td>
-                  <td>%s</td>
-                  <td>%s</td>
-                  <td><a class="btn btn-default" href="eventUpdate.php?id=%s" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
-                  <td><a class="btn btn-danger delete" href="eventDelete.php?id=%s" role="button"><i class="fa fa-trash-o"></i> Delete</a></td>
-                </tr>',
-                htmlspecialchars($row['id']),
-                htmlspecialchars($row['EventSwitch']),
-                htmlspecialchars($row['Heading']),
-                htmlspecialchars($row['EventText']),
-                htmlspecialchars($row['id']),
-                htmlspecialchars($row['id'])
-              );
-          }
-          echo '</tbody></table>';
-
-          mysqli_close($db);
-
-        ?>
+          <?php foreach ($events as $event) : ?>
+            <tr>
+              <td>Event <?php echo $event['id']; ?></td>
+              <td><?php echo $event['EventSwitch']; ?></td>
+              <td><?php echo $event['Heading']; ?></td>
+              <td><?php echo $event['EventText']; ?></td>
+              <td><a class="btn btn-default" href="eventUpdate.php?id=<?php echo $event['id']; ?>" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
+              <td><a class="btn btn-danger delete" href="eventDelete.php?id=<?php echo $event['id']; ?>" role="button"><i class="fa fa-trash-o"></i> Delete</a></td>
+            </tr>       
+           <?php endforeach; ?>
+      </tbody></table>
       </div>
     </div>
   </div>

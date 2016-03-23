@@ -1,71 +1,45 @@
 <?php
-session_start();
-require 'auth.php';
-include 'includes/header.php';
+  session_start();
+  require 'auth.php';
+  include 'includes/header.php';
 
+  $db = new Database();
+?>
+
+<?php
   $enabled = '';
   $heading = '';
   $text = '';
   $buttonSwitch = '';
-  $buttonText = 'Edit This Button';
-  $buttonLink = 'contact.php';
+  $buttonText = '';
+  $buttonLink = '';
 
   if (isset($_POST['submit'])) {
     $ok = true;
     if (!isset($_POST['enabled']) || $_POST['enabled'] === '') {
         $ok = false;
     } else {
-        $enabled = $_POST['enabled'];
+        $enabled = mysqli_real_escape_string($db->link, $_POST['enabled']);
     }
     if (!isset($_POST['heading']) || $_POST['heading'] === '') {
         $ok = false;
     } else {
-        $heading = $_POST['heading'];
+        $heading = mysqli_real_escape_string($db->link, $_POST['heading']);
     }
     if (!isset($_POST['eventText']) || $_POST['eventText'] === '') {
         $ok = false;
     } else {
-        $text = $_POST['eventText'];
+        $text = mysqli_real_escape_string($db->link, $_POST['eventText']);
     }
-    if (!isset($_POST['buttonSwitch']) || $_POST['buttonSwitch'] === '') {
-        $ok = false;
-    } else {
-        $buttonSwitch = $_POST['buttonSwitch'];
-    }
-    if (!isset($_POST['buttonText']) || $_POST['buttonText'] === '') {
-        $ok = false;
-    } else {
-        $buttonText = $_POST['buttonText'];
-    }
-    if (!isset($_POST['buttonLink']) || $_POST['buttonLink'] === '') {
-        $ok = false;
-    } else {
-        $buttonLink = $_POST['buttonLink'];
-    }
+    $buttonSwitch = mysqli_real_escape_string($db->link, $_POST['buttonSwitch']);
+    $buttonText = mysqli_real_escape_string($db->link, $_POST['buttonText']);
+    $buttonLink = mysqli_real_escape_string($db->link, $_POST['buttonLink']);
 
-     if ($ok) {
-    
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("INSERT INTO tblEvents (EventSwitch, Heading, EventText, ButtonSwitch, ButtonText, ButtonLink) VALUES (
-          '%s', '%s', '%s', '%s', '%s', '%s'
-        )", mysqli_real_escape_string($db, $enabled),
-	        mysqli_real_escape_string($db, $heading),
-	        mysqli_real_escape_string($db, $text),
-	        mysqli_real_escape_string($db, $buttonSwitch),
-	        mysqli_real_escape_string($db, $buttonText),
-	        mysqli_real_escape_string($db, $buttonLink));
-
-        mysqli_query($db, $sql);
-        mysqli_close($db);   
-        $message = '<div class="alert alert-success" role="alert">Event added.</div>';        
-            
-    } else {
-    	$message = '<div class="alert alert-danger" role="alert">There was an error adding your event. Please enter something for all fields.</div>';
-    }
-    
+    if ($ok) {  
+      $insert_row = $db->insert("INSERT INTO tblEvents (EventSwitch, Heading, EventText, ButtonSwitch, ButtonText, ButtonLink) VALUES (
+        '$enabled', '$heading', '$text', '$buttonSwitch', '$buttonText', '$buttonLink')");            
+    } 
   }
-
-
 ?>
 <body>
   <div class="container">
@@ -176,11 +150,6 @@ include 'includes/header.php';
             </div>
           </div>
         </form>
-        <div class="col-sm-offset-2 col-sm-6 text-center">
-          <?php
-              echo "<p>$message</p>";
-          ?>
-        </div>
       </div>
     </div>
   </div>

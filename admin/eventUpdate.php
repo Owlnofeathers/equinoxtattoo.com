@@ -1,9 +1,12 @@
 <?php
-session_start();
-require 'auth.php';
-include 'includes/header.php';
+  session_start();
+  require 'auth.php';
+  include 'includes/header.php';
 
+  $db = new Database();
+?>
 
+<?php
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
   } else {
@@ -22,63 +25,36 @@ include 'includes/header.php';
     if (!isset($_POST['enabled']) || $_POST['enabled'] === '') {
         $ok = false;
     } else {
-        $enabled = $_POST['enabled'];
+        $enabled = mysqli_real_escape_string($db->link, $_POST['enabled']);
     }
     if (!isset($_POST['heading']) || $_POST['heading'] === '') {
         $ok = false;
     } else {
-        $heading = $_POST['heading'];
+        $heading = mysqli_real_escape_string($db->link, $_POST['heading']);
     }
     if (!isset($_POST['eventText']) || $_POST['eventText'] === '') {
         $ok = false;
     } else {
-        $text = $_POST['eventText'];
+        $text = mysqli_real_escape_string($db->link, $_POST['eventText']);
     }
-    if (!isset($_POST['buttonSwitch']) || $_POST['buttonSwitch'] === '') {
-        $ok = false;
-    } else {
-        $buttonSwitch = $_POST['buttonSwitch'];
-    }
-    if (!isset($_POST['buttonText']) || $_POST['buttonText'] === '') {
-        $ok = false;
-    } else {
-        $buttonText = $_POST['buttonText'];
-    }
-    if (!isset($_POST['buttonLink']) || $_POST['buttonLink'] === '') {
-        $ok = false;
-    } else {
-        $buttonLink = $_POST['buttonLink'];
-    }
-
+    $buttonSwitch = mysqli_real_escape_string($db->link, $_POST['buttonSwitch']);
+    $buttonText = mysqli_real_escape_string($db->link, $_POST['buttonText']);
+    $buttonLink = mysqli_real_escape_string($db->link, $_POST['buttonLink']);
+ 
     if ($ok) {
-        // add database code here
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("UPDATE tblEvents SET EventSwitch='%s', Heading='%s', EventText='%s', ButtonSwitch='%s', ButtonText='%s', ButtonLink='%s'
-          WHERE id=%s",
-          mysqli_real_escape_string($db, $enabled),
-          mysqli_real_escape_string($db, $heading),
-          mysqli_real_escape_string($db, $text),
-          mysqli_real_escape_string($db, $buttonSwitch),
-          mysqli_real_escape_string($db, $buttonText),
-          mysqli_real_escape_string($db, $buttonLink),
-          $id);
-        mysqli_query($db, $sql);
-        $message = '<div class="alert alert-success" role="alert">Event updated.</div>';
-        mysqli_close($db);
+        $events = $db->update("UPDATE tblEvents SET EventSwitch = '$enabled', Heading = '$heading', EventText = '$text', ButtonSwitch = '$buttonSwitch', ButtonText = '$buttonText', ButtonLink = '$buttonLink'
+          WHERE id = '$id'");
       }
   } else {
-      include '../includes/databaseConnection.php';
-      $sql = sprintf('SELECT * FROM tblEvents WHERE id=%s', $id);
-      $result = mysqli_query($db, $sql);
-      foreach ($result as $row) {
-          $enabled = $row['EventSwitch'];
-          $heading = $row['Heading'];
-          $text = $row['EventText'];
-          $buttonSwitch = $row['ButtonSwitch'];
-          $buttonText = $row['ButtonText'];
-          $buttonLink = $row['ButtonLink'];        
+      $events = $db->select("SELECT * FROM tblEvents WHERE id =" .$id);
+      foreach ($events as $event) {
+          $enabled = $event['EventSwitch'];
+          $heading = $event['Heading'];
+          $text = $event['EventText'];
+          $buttonSwitch = $event['ButtonSwitch'];
+          $buttonText = $event['ButtonText'];
+          $buttonLink = $event['ButtonLink'];        
         }
-      mysqli_close($db);
   }
 
 ?>
@@ -190,11 +166,6 @@ include 'includes/header.php';
             </div>
           </div>
         </form>
-        <div class="col-sm-offset-2 col-sm-6 text-center">
-          <?php
-              echo "<p>$message</p>";
-          ?>
-        </div>
       </div>
     </div>
   </div>
