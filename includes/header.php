@@ -1,4 +1,8 @@
-<?php ob_start(); ?>
+<?php 
+	ob_start(); 
+  include 'config/config.php';
+	include 'libraries/Database.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>

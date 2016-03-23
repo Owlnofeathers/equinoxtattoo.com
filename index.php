@@ -1,34 +1,33 @@
 <?php 
 	require'includes/gallery.php';
 	include'includes/header.php';
+
+	$db = new Database();
 ?>
 
-	<section class="top">
-		<div class="jumbotron">
-		  <div class="container animated fadeIn">
-		  	<div class="wow fadeInLeft" data-wow-duration="3s">
-		  		<img class="img-responsive pull-right" src="images/equinox-logo.png" alt="Logo image">
-		  	</div>
-			<h1>Equinox Tattoo Collective</h1>
-			<p>Looking to book your next tattoo appointment with one of our artists?  Just click below to find instructions and submit your request and we will contact you to set up a consultation.</p>
-			<p><a class="btn btn-success btn-lg" href="booking.php" role="button">Book An Appointment</a></p>
-		  </div>
-		</div>
-	</section>
+<section class="top">
+	<div class="jumbotron">
+	  <div class="container animated fadeIn">
+	  	<div class="wow fadeInLeft" data-wow-duration="3s">
+	  		<img class="img-responsive pull-right" src="images/equinox-logo.png" alt="Logo image">
+	  	</div>
+		<h1>Equinox Tattoo Collective</h1>
+		<p>Looking to book your next tattoo appointment with one of our artists?  Just click below to find instructions and submit your request and we will contact you to set up a consultation.</p>
+		<p><a class="btn btn-success btn-lg" href="booking.php" role="button">Book An Appointment</a></p>
+	  </div>
+	</div>
+</section>
 
-	<!-- Slider Section -->
-	
-	<?php
-	include 'includes/databaseConnection.php';
+<!-- Slider Section -->
+<?php
 
-    $query = 'SELECT * FROM tblSliders WHERE SlideSwitch = 1';
-	$res    = mysqli_query($db,$query);
-	$count  =   mysqli_num_rows($res);
+    $sliders= $db->select("SELECT * FROM tblSliders WHERE SlideSwitch = 1");
+	$count  =   mysqli_num_rows($sliders);
 	$slides='';
 	$Indicators='';
 	$counter=0;
 	 
-	    while($row=mysqli_fetch_array($res))
+	    while($row = $sliders->fetch_assoc())
 	    {
 	 
 	        $title = $row['Heading'];
@@ -122,12 +121,9 @@
 
 	<!-- Gallery Section -->
 	<?php
-        include 'includes/databaseConnection.php';
+        $galleries = $db->select("SELECT * FROM tblGallery WHERE GallerySwitch = 1");
 
-        $sql = 'SELECT * FROM tblGallery WHERE GallerySwitch = 1';
-        $result = mysqli_query($db, $sql);
-
-        foreach ($result as $row) {
+        foreach ($galleries as $gallery) {
         	printf('
         		<section>
         			<div class="container art-gallery">
@@ -136,10 +132,10 @@
         				<div class="row">
         					<div class="grid js-masonry col-md-12">
         		',
-              htmlspecialchars($row['GalleryText']),
-              htmlspecialchars($row['GalleryLink']),
-              htmlspecialchars($row['GalleryName']),
-              htmlspecialchars($row['GalleryName'])
+              htmlspecialchars($gallery['GalleryText']),
+              htmlspecialchars($gallery['GalleryLink']),
+              htmlspecialchars($gallery['GalleryName']),
+              htmlspecialchars($gallery['GalleryName'])
               );
 
         	gallery_display('images/gallery/', 'art gallery', 'Artist'); 
@@ -160,31 +156,28 @@
 			<h2 class="page-header">Upcoming Events</h2>
 			<div class="row event-list">
 				<div class="col-md-12">
-					<?php
-				        include 'includes/databaseConnection.php';
-				        
-				        $sql = 'SELECT * FROM tblEvents WHERE EventSwitch = 1';
-				        $result = mysqli_query($db, $sql);
+					<?php				        
+				        $events = $db->select("SELECT * FROM tblEvents WHERE EventSwitch = 1");
 
-				        foreach ($result as $row) {
+				        foreach ($events as $event) {
 				            printf('				              
 				            	<div class="panel panel-default">
 				              		<div class="panel-body">
 				                		<h3>%s</h3>
 				                		<p>%s</p>
 				                ',
-				              htmlspecialchars($row['Heading']),
-				              htmlspecialchars($row['EventText'])
+				              htmlspecialchars($event['Heading']),
+				              htmlspecialchars($event['EventText'])
 				              );
 				              		     
-				            if($row['ButtonSwitch'] == 1){
+				            if($event['ButtonSwitch'] == 1){
 				            	printf('
 				            				<p><a class="btn btn-success" href="%s">%s</a></p>
 				            			</div>
 				            		</div>
 				            		',
-				            	  htmlspecialchars($row['ButtonLink']),
-				                  htmlspecialchars($row['ButtonText'])	
+				            	  htmlspecialchars($event['ButtonLink']),
+				                  htmlspecialchars($event['ButtonText'])	
 				              	  );
 
 					        } else {
@@ -229,12 +222,12 @@
 	<!-- needed so images wouldnt stack on top of each other on load -->
 	<script src="js/imagesLoaded.js"></script>
 	<script>
-	var $container = $('.grid');
-	$container.imagesLoaded(function(){
-	  $container.masonry({
-		itemSelector : '.grid-item'
-	  });
-	});
+		var $container = $('.grid');
+		$container.imagesLoaded(function(){
+		  $container.masonry({
+			itemSelector : '.grid-item'
+		  });
+		});
 	</script>
 
   </body>
