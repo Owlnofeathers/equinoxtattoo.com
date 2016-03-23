@@ -167,7 +167,7 @@
 				                		<p>%s</p>
 				                ',
 				              htmlspecialchars($event['Heading']),
-				              htmlspecialchars($event['EventText'])
+				              htmlspecialchars_decode($event['EventText'])
 				              );
 				              		     
 				            if($event['ButtonSwitch'] == 1){

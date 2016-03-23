@@ -123,7 +123,7 @@
           <div class="form-group">
             <label for="galleryText" class="col-sm-3 control-label">Gallery Description</label>
             <div class="col-sm-6">
-              <textarea class="form-control" rows="4" name="galleryText"><?php echo htmlspecialchars($galleryText);?></textarea>
+              <textarea class="mceNoEditor form-control" rows="4" name="galleryText"><?php echo htmlspecialchars($galleryText);?></textarea>
             </div>
           </div>
 
@@ -132,7 +132,7 @@
               How the description will appear on the site
             </div>
             <div class="panel-body">
-              <?php echo htmlspecialchars($galleryText);?> <a href="<?php echo htmlspecialchars($galleryLink); ?>" title="<?php echo htmlspecialchars($galleryName);?>'s contact"><?php echo htmlspecialchars($galleryName);?>.</a>
+              <?php echo htmlspecialchars($galleryText); ?> <a href="<?php echo htmlspecialchars($galleryLink); ?>" title="<?php echo htmlspecialchars($galleryName);?>'s contact"><?php echo htmlspecialchars($galleryName);?>.</a>
             </div>
           </div>
 
