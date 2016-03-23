@@ -1,8 +1,10 @@
 <?php
-session_start();
-require 'auth.php';
-include 'includes/header.php';
-include 'includes/upload.php';
+  session_start();
+  require 'auth.php';
+  include 'includes/header.php';
+  include 'includes/upload.php';
+
+  $db = new Database();
 
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
@@ -21,51 +23,38 @@ include 'includes/upload.php';
     if (!isset($_POST['gallerySwitch']) || $_POST['gallerySwitch'] === '') {
         $ok = false;
     } else {
-        $enabled = $_POST['gallerySwitch'];
+        $enabled = mysqli_real_escape_string($db->link, $_POST['gallerySwitch']);
     }
     if (!isset($_POST['galleryName']) || $_POST['galleryName'] === '') {
         $ok = false;
     } else {
-        $galleryName = $_POST['galleryName'];
+        $galleryName = mysqli_real_escape_string($db->link, $_POST['galleryName']);
     }
     if (!isset($_POST['galleryLink']) || $_POST['galleryLink'] === '') {
         $ok = false;
     } else {
-        $galleryLink = $_POST['galleryLink'];
+        $galleryLink = mysqli_real_escape_string($db->link, $_POST['galleryLink']);
     }
     if (!isset($_POST['galleryText']) || $_POST['galleryText'] === '') {
         $ok = false;
     } else {
-        $galleryText = $_POST['galleryText'];
+        $galleryText = mysqli_real_escape_string($db->link, $_POST['galleryText']);
     }
 
     if ($ok) {
-        // add database code here
-        include '../includes/databaseConnection.php';
-        $sql = sprintf("UPDATE tblGallery SET GallerySwitch='%s', GalleryName='%s', GalleryLink='%s', GalleryText='%s'
-          WHERE id=%s",
-          mysqli_real_escape_string($db, $enabled),
-          mysqli_real_escape_string($db, $galleryName),
-          mysqli_real_escape_string($db, $galleryLink),
-          mysqli_real_escape_string($db, $galleryText),
-          $id);
-        mysqli_query($db, $sql);
-        $message = '<div class="alert alert-success" role="alert">Gallery updated.</div>';
-        mysqli_close($db);
-      }
-  } else {
-      include '../includes/databaseConnection.php';
-      $sql = sprintf('SELECT * FROM tblGallery WHERE id=%s', $id);
-      $result = mysqli_query($db, $sql);
-      foreach ($result as $row) {
-          $enabled = $row['GallerySwitch'];
-          $galleryName = $row['GalleryName'];
-          $galleryLink = $row['GalleryLink'];
-          $galleryText = $row['GalleryText'];       
-        }
-      mysqli_close($db);
-  }
 
+        $update_row = $db->update("UPDATE tblGallery SET GallerySwitch = '$enabled', GalleryName = '$galleryName', GalleryLink = '$galleryLink', GalleryText = '$galleryText'
+          WHERE id = " .$id);
+      }
+    } else {   
+      $galleries = $db->select("SELECT * FROM tblGallery WHERE id=" .$id);  
+      foreach ($galleries as $gallery) {
+          $enabled = $gallery['GallerySwitch'];
+          $galleryName = $gallery['GalleryName'];
+          $galleryLink = $gallery['GalleryLink'];
+          $galleryText = $gallery['GalleryText'];       
+        }
+    }
 ?>
 <body>
   <div class="container">
@@ -153,19 +142,8 @@ include 'includes/upload.php';
             </div>
           </div>
         </form>
-       <!--  <div class="col-sm-offset-2 col-sm-6 text-center">
-          <?php
-            //  echo "<p>$message</p>";
-          ?>
-        </div> -->
       </div>
       <div class="col col-md-4">  
-          <?php
-            echo "<p>$message</p>"; 
-
-            // debug
-            //print_r($_FILES);        
-          ?>
         <div class="panel panel-default">   
          <div class="panel-heading"><strong>
           Upload Images To Gallery

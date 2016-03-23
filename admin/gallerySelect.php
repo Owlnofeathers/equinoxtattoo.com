@@ -1,6 +1,10 @@
 <?php
   require 'auth.php';
   include 'includes/header.php';
+
+  $db = new Database();
+
+  $galleries = $db->select("SELECT * FROM tblGallery");
 ?>
 
   <div class="container">
@@ -11,12 +15,7 @@
         <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Gallery Administration" 
         data-content="Review and edit the gallery information from here.">
         <i class="fa fa-info-circle"></i></a></h2>
-        <?php
-        include '../includes/databaseConnection.php';
-        $sql = 'SELECT * FROM tblGallery';
-        $result = mysqli_query($db, $sql);
 
-        echo '
         <table class="table table-responsive table-bordered table-hover">
           <tbody>
             <th bgcolor="#000">
@@ -26,34 +25,21 @@
               <td bgcolor="#000"><strong>Gallery Description</strong></td>
               <td bgcolor="#000"></td>
             </th>
-        ';
-        foreach ($result as $row) {
-            printf('
-              
+
+            <?php foreach ($galleries as $gallery) : ?>
               <tr>
-                <td>Gallery %s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td>%s</td>
-                <td><a class="btn btn-default" href="galleryUpdate.php?id=%s" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
-              </tr>',
-              htmlspecialchars($row['id']),
-              htmlspecialchars($row['GallerySwitch']),
-              htmlspecialchars($row['GalleryName']),
-              htmlspecialchars($row['GalleryLink']),
-              htmlspecialchars($row['GalleryText']),
-              htmlspecialchars($row['id'])
-            );
-        }
-        echo '</tbody></table>';
+                <td>Gallery <?php echo $gallery['id']; ?></td>
+                <td><?php echo $gallery['GallerySwitch']; ?></td>
+                <td><?php echo $gallery['GalleryName']; ?></td>
+                <td><?php echo $gallery['GalleryLink']; ?></td>
+                <td><?php echo $gallery['GalleryText']; ?></td>
+                <td><a class="btn btn-default" href="galleryUpdate.php?id=<?php echo $gallery['id']; ?>" role="button"><i class="fa fa-pencil"></i> Edit</a></td>
+              </tr>
+            <?php endforeach; ?>
 
-        mysqli_close($db);
-
-        ?>
+        </tbody></table>
       </div>
     </div>
-
  </div>
 
     <?php readfile('includes/footer.html'); ?>
