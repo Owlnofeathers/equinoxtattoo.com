@@ -5,21 +5,13 @@
   include 'includes/upload.php';
 
   $db = new Database();
+  $ar = new Artist();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
   } else {
     header('Location: artistSelect.php');
   }
-
-  $enabled = '';
-  $name = '';
-  $price = '';
-  $description = '';
-  $facebook = '';
-  $instagram = '';
-  $email = '';
-
 
   if (isset($_POST['save'])) {
     $ok = true;
@@ -60,11 +52,10 @@
     }
 
     if ($ok) {
-        $update_row = $db->update("UPDATE tblArtists SET ArtistSwitch = '$enabled', Name = '$name', Price = '$price', Description = '$description', Facebook = '$facebook', Instagram = '$instagram', Email = '$email'
-          WHERE id = '$id'");
+        $update_row = $db->update($ar->updateArtist($enabled, $name, $price, $description, $facebook, $instagram, $email, $id));
       }
     } else {
-      $artist = $db->select("SELECT * FROM tblArtists WHERE id=" .$id)->fetch_assoc();
+      $artist = $db->select($ar->getArtistById($id))->fetch_assoc();
 
       $enabled = $artist['ArtistSwitch'];
       $name = $artist['Name'];
@@ -185,18 +176,10 @@
             </div>
           </div>
         </form>
-       <!--  <div class="col-sm-offset-2 col-sm-6 text-center">
-          <?php
-            //  echo "<p>$message</p>";
-          ?>
-        </div> -->
       </div>
       <div class="col col-md-4">  
           <?php
-            echo "<p>$message</p>"; 
-
-            // debug
-            //print_r($_FILES);        
+            echo "<p>$message</p>";       
           ?>
         <div class="panel panel-default">   
          <div class="panel-heading"><strong>

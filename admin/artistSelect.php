@@ -3,7 +3,9 @@
   include 'includes/header.php';
 
   $db = new Database();
-  $artists = $db->select('SELECT * FROM tblArtists');
+  $ar = new Artist();
+
+  $artists = $db->select($ar->getAllArtists());
 ?>
 
   <div class="container">
