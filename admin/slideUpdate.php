@@ -5,19 +5,13 @@
   include 'includes/upload.php';
 
   $db = new Database();
+  $sl = new Slider();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
   } else {
     header('Location: slideSelect.php');
   }
-
-  $enabled = '';
-  $heading = '';
-  $text = '';
-  $buttonSwitch = '';
-  $buttonText = '';
-  $buttonLink = '';
 
   if (isset($_POST['save'])) {
     $ok = true;
@@ -30,10 +24,9 @@
   }
 
     if ($ok) {
-      $update_row = $db->update("UPDATE tblSliders SET SlideSwitch='$enabled', Heading='$heading', SlideText='$text', ButtonSwitch='$buttonSwitch', ButtonText='$buttonText', ButtonLink='$buttonLink'
-          WHERE id=" .$id);
+      $update_row = $db->update($sl->updateSlider($enabled, $heading, $text, $buttonSwitch, $buttonText, $buttonLink, $id));
     } else {
-      $sliders = $db->select("SELECT * FROM tblSliders WHERE id = " .$id);
+      $sliders = $db->select($sl->getSliderById($id));
  
       foreach ($sliders as $slider) {
           $enabled = $slider['SlideSwitch'];
