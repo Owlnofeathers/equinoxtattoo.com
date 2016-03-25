@@ -3,6 +3,7 @@
   require'includes/header.php';
 
   $db = new Database();
+  $ar = new Artist();
 
   if (isset($_GET['id'])){
 	 $id = $_GET['id'];
@@ -11,7 +12,7 @@
     exit();
   }
 
-  $artist = $db->select("SELECT * FROM tblArtists WHERE id = " .$id);
+  $artist = $db->select($ar->getArtistById($id));
 
   foreach ($artist as $row) {
   	$id = $row['id'];

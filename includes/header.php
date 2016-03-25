@@ -2,6 +2,10 @@
 	ob_start(); 
   include 'config/config.php';
 	include 'libraries/Database.php';
+  include 'libraries/Artist.php';
+  include 'libraries/Slider.php';
+  include 'libraries/Gallery.php';
+  include 'libraries/Event.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

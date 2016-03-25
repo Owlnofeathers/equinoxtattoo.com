@@ -3,6 +3,9 @@
 	include'includes/header.php';
 
 	$db = new Database();
+	$sl = new Slider();
+	$ga = new Gallery();
+	$ev = new Event();
 ?>
 
 <section class="top">
@@ -20,8 +23,7 @@
 
 <!-- Slider Section -->
 <?php
-
-    $sliders= $db->select("SELECT * FROM tblSliders WHERE SlideSwitch = 1");
+    $sliders= $db->select($sl->getEnabledSliders());
 	$count  =   mysqli_num_rows($sliders);
 	$slides='';
 	$Indicators='';
@@ -121,7 +123,7 @@
 
 	<!-- Gallery Section -->
 	<?php
-        $galleries = $db->select("SELECT * FROM tblGallery WHERE GallerySwitch = 1");
+        $galleries = $db->select($ga->getEnabledGalleries());
 
         foreach ($galleries as $gallery) {
         	printf('
@@ -157,7 +159,7 @@
 			<div class="row event-list">
 				<div class="col-md-12">
 					<?php				        
-				        $events = $db->select("SELECT * FROM tblEvents WHERE EventSwitch = 1");
+				        $events = $db->select($ev->getEnabledEvents());
 
 				        foreach ($events as $event) {
 				            printf('				              

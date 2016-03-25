@@ -3,8 +3,9 @@
   include'includes/header.php';
 
   $db = new Database();
+  $ar = new Artist();
 
-  $artists = $db->select("SELECT * FROM tblArtists WHERE ArtistSwitch = 1");
+  $artists = $db->select($ar->getEnabledArtists());
 ?>
 
   <section class="section-title">
