@@ -3,8 +3,9 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $ga = new Gallery();
 
-  $galleries = $db->select("SELECT * FROM tblGallery");
+  $galleries = $db->select($ga->getAllGalleries());
 ?>
 
   <div class="container">

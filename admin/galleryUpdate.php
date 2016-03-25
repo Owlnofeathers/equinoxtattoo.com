@@ -5,18 +5,13 @@
   include 'includes/upload.php';
 
   $db = new Database();
-
+  $ga = new Gallery();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
   } else {
     header('Location: gallerySelect.php');
   }
-
-  $enabled = '';
-  $galleryName = '';
-  $galleryLink = '';
-  $galleryText = '';
 
   if (isset($_POST['save'])) {
     $ok = true;
@@ -42,12 +37,11 @@
     }
 
     if ($ok) {
-
-        $update_row = $db->update("UPDATE tblGallery SET GallerySwitch = '$enabled', GalleryName = '$galleryName', GalleryLink = '$galleryLink', GalleryText = '$galleryText'
-          WHERE id = " .$id);
+        $update_row = $db->update($ga->updateGallery($enabled, $galleryName, $galleryLink, $galleryText, $id));
       }
     } else {   
-      $galleries = $db->select("SELECT * FROM tblGallery WHERE id=" .$id);  
+      $galleries = $db->select($ga->getGalleryById($id)); 
+       
       foreach ($galleries as $gallery) {
           $enabled = $gallery['GallerySwitch'];
           $galleryName = $gallery['GalleryName'];
