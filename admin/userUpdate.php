@@ -5,16 +5,13 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $us = new User();
 
   if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
     $id = $_GET['id'];
   } else {
     header('Location: userSelect.php');
   }
-
-  $message = '';
-  $name = '';
-  $setAdmin = '';
 
   if (isset($_POST['submit'])) {
     $ok = true;
@@ -30,13 +27,12 @@
     }
    
     if ($ok) {
-
-        $update_row = $db->update("UPDATE tblUsers SET Name='$name', isAdmin='$setAdmin'
-          WHERE id =" .$id);
+        $update_row = $db->update($us->updateUser($name, $setAdmin, $id));
       }
 
   } else {
-      $usrs = $db->select("SELECT * FROM tblUsers WHERE id =" .$id);
+      $usrs = $db->select($us->getUserById($id));
+
       foreach ($usrs as $usr) {
           $name = $usr['Name'];
           $setAdmin = $usr['isAdmin'];
@@ -57,13 +53,12 @@
           $password = $_POST['password'];
           $password = password_hash($password, PASSWORD_DEFAULT);
     
-          $passes = $db->select("SELECT Password FROM tblUsers WHERE id =" .$id);
+          $passes = $db->select($us->getPasswordById($id));
           $pass = $passes->fetch_assoc(); 
           if ($pass) {
             $hash = $pass['Password'];
             if (password_verify($_POST['password'], $hash)) {
-              $update_row = $db->update("UPDATE tblUsers SET Password='$newPassword'
-                              WHERE id =" .$id);
+              $update_row = $db->update($us->updatePassword($newPassword, $id));
           } else 
               $message = '<div class="alert alert-danger" role="alert">Incorrect password.</div>';
 

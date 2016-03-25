@@ -6,6 +6,7 @@
   include 'libraries/Slider.php';
   include 'libraries/Gallery.php';
   include 'libraries/Event.php';
+  include 'libraries/User.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

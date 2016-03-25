@@ -4,14 +4,7 @@
   include 'includes/header.php';
 
   $db = new Database();
-?>
-
-<?php
-  $message = '';
-  $name = '';
-  $password = '';
-  $confirmPassword = '';
-  $setAdmin = '';
+  $us = new User();
 
   if (isset($_POST['submit'])) {
     $ok = true;
@@ -37,7 +30,7 @@
     }
 
     if ($ok) {
-        $checkUsername = $db->select("SELECT Name FROM tblUsers WHERE Name = '$name'");
+        $checkUsername = $db->select($us->getUserByName($name));
         if (mysqli_num_rows($checkUsername) > 0) {
            $message = '<div class="alert alert-danger" role="alert">User name already exists.</div>';
 
@@ -47,8 +40,7 @@
         	} else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             // add database code here
-            $insert_row = $db->insert("INSERT INTO tblUsers (Name, Password, isAdmin) VALUES (
-              '$name', '$hash', '$setAdmin')"); 
+            $insert_row = $db->insert($us->insertUser($name, $hash, $setAdmin)); 
             $message = '<div class="alert alert-success" role="alert">User added.</div>';   
             }     
             

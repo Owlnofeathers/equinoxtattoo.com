@@ -3,6 +3,7 @@
     include 'includes/header.php';
 
     $db = new Database();
+    $us = new User();
 
     if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
         $id = $_GET['id'];
@@ -10,4 +11,4 @@
         header('Location: userSelect.php');
     }
 
-    $delete_row = $db->delete("DELETE FROM tblUsers WHERE id =" .$id);
+    $delete_row = $db->delete($us->deleteUser($id));

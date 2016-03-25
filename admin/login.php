@@ -3,14 +3,14 @@
   require 'includes/password.php';
   include '../config/config.php';
   include '../libraries/Database.php';
+  include '../libraries/User.php';
 
   $db = new Database();
+  $us = new User();
 
-  $message = '';
-
-if (isset($_POST['name']) && isset($_POST['password'])) {
+  if (isset($_POST['name']) && isset($_POST['password'])) {
     $name = mysqli_real_escape_string($db->link, $_POST['name']);
-    $usr = $db->select("SELECT * FROM tblUsers WHERE Name='$name'");
+    $usr = $db->select($us->getUserByName($name));
     $row = $usr->fetch_assoc();
     if ($row) {
         $hash = $row['Password'];
@@ -28,7 +28,7 @@ if (isset($_POST['name']) && isset($_POST['password'])) {
     } else {
         $message = '<div class="alert alert-danger" role="alert">Login failed.</div>';
     }
-}
+  }
 
 ?>
 <!DOCTYPE html>

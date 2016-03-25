@@ -3,8 +3,9 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $us = new User();
 
-  $usrs = $db->select("SELECT * FROM tblUsers");
+  $usrs = $db->select($us->getAllUsers());
 ?>
 
   <div class="container">
