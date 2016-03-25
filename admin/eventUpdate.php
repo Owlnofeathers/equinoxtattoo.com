@@ -4,6 +4,7 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $ev = new Event();
 ?>
 
 <?php
@@ -12,13 +13,6 @@
   } else {
     header('Location: eventSelect.php');
   }
-
-  $enabled = '';
-  $heading = '';
-  $text = '';
-  $buttonSwitch = '';
-  $buttonText = '';
-  $buttonLink = '';
 
   if (isset($_POST['submit'])) {
     $ok = true;
@@ -42,11 +36,11 @@
     $buttonLink = mysqli_real_escape_string($db->link, $_POST['buttonLink']);
  
     if ($ok) {
-        $events = $db->update("UPDATE tblEvents SET EventSwitch = '$enabled', Heading = '$heading', EventText = '$text', ButtonSwitch = '$buttonSwitch', ButtonText = '$buttonText', ButtonLink = '$buttonLink'
-          WHERE id = '$id'");
+        $events = $db->update($ev->updateEvent($enabled, $heading, $text, $buttonSwitch, $buttonText, $buttonLink, $id));
       }
   } else {
-      $events = $db->select("SELECT * FROM tblEvents WHERE id =" .$id);
+      $events = $db->select($ev->getEventById($id));
+      
       foreach ($events as $event) {
           $enabled = $event['EventSwitch'];
           $heading = $event['Heading'];

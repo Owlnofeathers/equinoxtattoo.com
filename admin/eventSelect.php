@@ -3,8 +3,9 @@
   include 'includes/header.php';
 
   $db = new Database();
+  $ev = new Event();
 
-  $events = $db->select("SELECT * FROM tblEvents");
+  $events = $db->select($ev->getAllEvents());
 ?>
 
   <div class="container">

@@ -4,15 +4,7 @@
   include 'includes/header.php';
 
   $db = new Database();
-?>
-
-<?php
-  $enabled = '';
-  $heading = '';
-  $text = '';
-  $buttonSwitch = '';
-  $buttonText = '';
-  $buttonLink = '';
+  $ev = new Event();
 
   if (isset($_POST['submit'])) {
     $ok = true;
@@ -36,8 +28,7 @@
     $buttonLink = mysqli_real_escape_string($db->link, $_POST['buttonLink']);
 
     if ($ok) {  
-      $insert_row = $db->insert("INSERT INTO tblEvents (EventSwitch, Heading, EventText, ButtonSwitch, ButtonText, ButtonLink) VALUES (
-        '$enabled', '$heading', '$text', '$buttonSwitch', '$buttonText', '$buttonLink')");            
+      $insert_row = $db->insert($ev->insertEvent($enabled, $heading, $text, $buttonSwitch, $buttonText, $buttonLink));            
     } 
   }
 ?>
